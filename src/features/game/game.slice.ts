@@ -72,7 +72,7 @@ export const gameSlice = createSlice({
 
 export const selectAllCards = (state: RootState) => state.game.cards;
 
-export const { updateGame, assignSpymaster, startGame, revealCard } =
+export const { updateGame, assignSpymaster, startGame, revealCard, addPlayer } =
   gameSlice.actions;
 
 export default gameSlice.reducer;

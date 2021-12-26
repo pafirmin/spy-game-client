@@ -1,8 +1,8 @@
 import React from "react";
-import { Card } from "../../features/game/game.slice";
+import { Card as ICard } from "../../features/game/game.slice";
 
 interface Props {
-  card: Card;
+  card: ICard;
 }
 
 const Card = ({ card }: Props) => {
