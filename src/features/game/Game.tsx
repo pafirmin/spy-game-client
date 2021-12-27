@@ -27,7 +27,7 @@ const Game = () => {
   const onNewUserJoined = (player: Player) => dispatch(addPlayer(player));
   const onGameStarted = () => dispatch(startGame());
   const onCardRevealed = (card: Card) => dispatch(revealCard(card));
-  const onPlayerLeft = (player: Player) => dispatch(removePlayer(player));
+  const onPlayerLeft = (name: string) => dispatch(removePlayer(name));
   const onSpymasterAsssigned = (player: Player) =>
     dispatch(assignSpymaster(player));
 
@@ -37,16 +37,16 @@ const Game = () => {
     socket.on("playerLeft", onPlayerLeft);
     socket.on("newUserJoined", onNewUserJoined);
     socket.on("gameStarted", onGameStarted);
-    socket.on("revealCard", onCardRevealed);
-    socket.on("assignSpymaster", onSpymasterAsssigned);
+    socket.on("cardRevealed", onCardRevealed);
+    socket.on("spymasterAssigned", onSpymasterAsssigned);
 
     return () => {
       socket.emit("leaveGame", player);
       socket.off("gameJoined", onGameJoined);
       socket.off("newUserJoined", onNewUserJoined);
       socket.off("gameStarted", onGameStarted);
-      socket.off("revealCard", onCardRevealed);
-      socket.off("assignSpymaster", onSpymasterAsssigned);
+      socket.off("cardRevealed", onCardRevealed);
+      socket.off("spymasterAssigned", onSpymasterAsssigned);
       socket.off("playerLeft", onPlayerLeft);
     };
   }, []);
@@ -62,7 +62,14 @@ const Game = () => {
       <Grid xs={2} item>
         <Roster team={Teams.RED} />
       </Grid>
-      <Grid container item xs={8} direction="column" alignItems="stretch">
+      <Grid
+        container
+        item
+        xs={8}
+        direction="column"
+        justifyContent="center"
+        style={{ maxWidth: "1200px" }}
+      >
         <Grid item>
           <ScoreBoard />
         </Grid>

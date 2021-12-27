@@ -52,7 +52,7 @@ export const gameSlice = createSlice({
     assignSpymaster: (state, action: PayloadAction<Player>) => {
       state.players = state.players.map((player) =>
         player.name === action.payload.name
-          ? { ...player, isAssassin: true }
+          ? { ...player, isSpymaster: true }
           : player
       );
     },
@@ -67,10 +67,8 @@ export const gameSlice = createSlice({
     addPlayer: (state, action: PayloadAction<Player>) => {
       state.players.push(action.payload);
     },
-    removePlayer: (state, action: PayloadAction<Player>) => {
-      state.players = state.players.filter(
-        (p) => p.name !== action.payload.name
-      );
+    removePlayer: (state, action: PayloadAction<string>) => {
+      state.players = state.players.filter((p) => p.name !== action.payload);
     },
   },
 });
