@@ -10,9 +10,15 @@ interface Props {
 
 const Roster = ({ team }: Props) => {
   const players = useSelector((state: RootState) => state.game.players);
+  console.log(players);
 
   return (
-    <Paper>
+    <Drawer
+      style={{ width: "100%" }}
+      variant="permanent"
+      anchor={team === Teams.RED ? "left" : "right"}
+      PaperProps={{ style: { width: "15%" } }}
+    >
       <List>
         {players
           .filter((player) => player.team === team)
@@ -20,7 +26,7 @@ const Roster = ({ team }: Props) => {
             <ListItem>{player.name}</ListItem>
           ))}
       </List>
-    </Paper>
+    </Drawer>
   );
 };
 

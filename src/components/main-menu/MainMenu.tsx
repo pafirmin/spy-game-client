@@ -10,17 +10,17 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Teams, updateGame } from "../../features/game/game.slice";
+import { Player } from "../../features/game/game.slice";
 import { updatePlayer } from "../../features/player/player.slice";
 import socket from "../../services/socket";
 
 const MainMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<Partial<Player>>({
     name: "",
     room: "",
-    team: Teams.BLUE,
+    team: null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -8,9 +8,9 @@ const Board = () => {
   const cards = useSelector(selectAllCards);
 
   return (
-    <Grid container spacing={2}>
+    <Grid spacing={4} container>
       {cards.map((card) => (
-        <Grid item>
+        <Grid style={{ flexBasis: "20%", maxWidth: "20%" }} xs={2} item>
           <Card card={card} />
         </Grid>
       ))}
