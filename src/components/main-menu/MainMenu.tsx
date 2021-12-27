@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateGame } from "../../features/game/game.slice";
+import { Teams, updateGame } from "../../features/game/game.slice";
 import { updatePlayer } from "../../features/player/player.slice";
 import socket from "../../services/socket";
 
@@ -20,7 +20,7 @@ const MainMenu = () => {
   const [values, setValues] = useState({
     name: "",
     room: "",
-    team: null,
+    team: Teams.BLUE,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,25 +28,22 @@ const MainMenu = () => {
   };
 
   const handleCreateRoom = () => {
+    console.log(values);
     dispatch(updatePlayer(values));
     socket.emit("create", values.room);
   };
 
   const handleJoinRoom = () => {
     dispatch(updatePlayer(values));
-    socket.emit("join", values);
+    navigate(`/${values.room}`);
   };
 
   useEffect(() => {
-    socket.on("gameCreated", () => {
-      socket.emit("join", values);
-    });
-    socket.on("gameJoined", (game) => {
-      dispatch(updateGame(game));
-      navigate(`/${game.name}`);
-    });
+    const onGameCreated = (name: string) => navigate(`/${name}`);
 
-    return () => void socket.disconnect();
+    socket.on("gameCreated", onGameCreated);
+
+    return () => void socket.off("gameCreated");
   }, []);
 
   return (
@@ -59,7 +56,7 @@ const MainMenu = () => {
       }}
     >
       <Typography component="h1" variant="h5">
-        Sign in
+        Join game
       </Typography>
       <Box component="form" noValidate sx={{ mt: 1 }}>
         <TextField

@@ -67,12 +67,23 @@ export const gameSlice = createSlice({
     addPlayer: (state, action: PayloadAction<Player>) => {
       state.players.push(action.payload);
     },
+    removePlayer: (state, action: PayloadAction<Player>) => {
+      state.players = state.players.filter(
+        (p) => p.name !== action.payload.name
+      );
+    },
   },
 });
 
 export const selectAllCards = (state: RootState) => state.game.cards;
 
-export const { updateGame, assignSpymaster, startGame, revealCard, addPlayer } =
-  gameSlice.actions;
+export const {
+  updateGame,
+  assignSpymaster,
+  startGame,
+  revealCard,
+  addPlayer,
+  removePlayer,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;
