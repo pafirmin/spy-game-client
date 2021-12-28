@@ -1,12 +1,13 @@
 import { Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { RootState } from "../../app/store";
 import Board from "../../components/board";
 import Roster from "../../components/roster";
 import ScoreBoard from "../../components/scoreboard/ScoreBoard";
 import socket from "../../services/socket";
-import { Player } from "../player/player.slice";
+import { Player, updatePlayer } from "../player/player.slice";
 import {
   assignSpymaster,
   Card,
@@ -22,8 +23,12 @@ import {
 const Game = () => {
   const dispatch = useDispatch();
   const player = useSelector((state: RootState) => state.player);
+  const { room } = useParams();
 
-  const onGameJoined = (game: GameState) => dispatch(updateGame(game));
+  const onGameJoined = (game: GameState, player: Player) => {
+    dispatch(updateGame(game));
+    dispatch(updatePlayer(player));
+  };
   const onNewUserJoined = (player: Player) => dispatch(addPlayer(player));
   const onGameStarted = () => dispatch(startGame());
   const onCardRevealed = (card: Card) => dispatch(revealCard(card));
@@ -32,7 +37,7 @@ const Game = () => {
     dispatch(assignSpymaster(player));
 
   useEffect(() => {
-    socket.emit("join", player);
+    socket.emit("join", player, room);
     socket.on("gameJoined", onGameJoined);
     socket.on("playerLeft", onPlayerLeft);
     socket.on("newUserJoined", onNewUserJoined);

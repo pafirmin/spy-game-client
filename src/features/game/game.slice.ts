@@ -40,14 +40,13 @@ export const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    updateGame: (state, action: PayloadAction<Partial<GameState>>) => {
+    updateGame: (state, action: PayloadAction<GameState>) => {
       return Object.assign(state, action.payload);
     },
     assignSpymaster: (state, action: PayloadAction<Player>) => {
+      console.log(action.payload);
       state.players = state.players.map((player) =>
-        player.name === action.payload.name
-          ? { ...player, isSpymaster: true }
-          : player
+        player.id === action.payload.id ? action.payload : player
       );
     },
     startGame: (state) => {
@@ -62,7 +61,7 @@ export const gameSlice = createSlice({
       state.players.push(action.payload);
     },
     removePlayer: (state, action: PayloadAction<string>) => {
-      state.players = state.players.filter((p) => p.name !== action.payload);
+      state.players = state.players.filter((p) => p.id !== action.payload);
     },
   },
 });

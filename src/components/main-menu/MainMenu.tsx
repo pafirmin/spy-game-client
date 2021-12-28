@@ -2,13 +2,13 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Player, updatePlayer } from "../../features/player/player.slice";
+import { updatePlayer } from "../../features/player/player.slice";
 import socket from "../../services/socket";
 
 const MainMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [values, setValues] = useState<Partial<Player>>({
+  const [values, setValues] = useState({
     name: "",
     room: "",
     team: null,
@@ -21,12 +21,12 @@ const MainMenu = () => {
   };
 
   const handleCreateRoom = () => {
-    dispatch(updatePlayer(values));
+    dispatch(updatePlayer({ name: values.name, team: values.team }));
     socket.emit("create", values.room);
   };
 
   const handleJoinRoom = () => {
-    dispatch(updatePlayer(values));
+    dispatch(updatePlayer({ name: values.name, team: values.team }));
     navigate(`/${values.room}`);
   };
 

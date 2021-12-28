@@ -17,7 +17,6 @@ const Card = ({ card }: Props) => {
     () => card.isRevealed || player.isSpymaster,
     [player, card]
   );
-  console.log(player);
 
   const handleReveal = () => {
     socket.emit("reveal", card);
