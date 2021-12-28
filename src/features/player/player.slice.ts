@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Teams, assignSpymaster } from "../game/game.slice";
 
 export interface Player {
   name: string;
@@ -22,12 +23,12 @@ export const playerSlice = createSlice({
       return Object.assign(state, action.payload);
     },
   },
-  extraReducers: {
-    assignSpymaster: (state, action: PayloadAction<Player>) => {
+  extraReducers: (builder) => {
+    builder.addCase(assignSpymaster, (state, action: PayloadAction<Player>) => {
       if (state.name === action.payload.name) {
         return { ...state, isSpymaster: true };
       }
-    },
+    });
   },
 });
 
