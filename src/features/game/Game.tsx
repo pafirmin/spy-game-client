@@ -18,6 +18,7 @@ import {
   updateGame,
   GameState,
   removePlayer,
+  gameOver,
 } from "./game.slice";
 
 const Game = () => {
@@ -35,6 +36,9 @@ const Game = () => {
   const onPlayerLeft = (name: string) => dispatch(removePlayer(name));
   const onSpymasterAsssigned = (player: Player) =>
     dispatch(assignSpymaster(player));
+  const onNewGameStarted = (newGame: GameState) =>
+    dispatch(updateGame(newGame));
+  const onGameOver = () => dispatch(gameOver());
 
   useEffect(() => {
     socket.emit("join", player, room);
@@ -44,6 +48,8 @@ const Game = () => {
     socket.on("gameStarted", onGameStarted);
     socket.on("cardRevealed", onCardRevealed);
     socket.on("spymasterAssigned", onSpymasterAsssigned);
+    socket.on("newGame", onNewGameStarted);
+    socket.on("gameOver", onGameOver);
 
     return () => {
       socket.emit("leaveGame", player);
@@ -53,6 +59,8 @@ const Game = () => {
       socket.off("cardRevealed", onCardRevealed);
       socket.off("spymasterAssigned", onSpymasterAsssigned);
       socket.off("playerLeft", onPlayerLeft);
+      socket.off("newGame", onNewGameStarted);
+      socket.off("gameOver", onGameOver);
     };
   }, []);
 

@@ -23,6 +23,7 @@ export interface GameState {
   remainingRed: number;
   remainingBlue: number;
   started: boolean;
+  gameOver: boolean;
 }
 
 const initialState: GameState = {
@@ -34,6 +35,7 @@ const initialState: GameState = {
   remainingRed: 0,
   remainingBlue: 0,
   started: false,
+  gameOver: false,
 };
 
 export const gameSlice = createSlice({
@@ -44,7 +46,6 @@ export const gameSlice = createSlice({
       return Object.assign(state, action.payload);
     },
     assignSpymaster: (state, action: PayloadAction<Player>) => {
-      console.log(action.payload);
       state.players = state.players.map((player) =>
         player.id === action.payload.id ? action.payload : player
       );
@@ -63,6 +64,9 @@ export const gameSlice = createSlice({
     removePlayer: (state, action: PayloadAction<string>) => {
       state.players = state.players.filter((p) => p.id !== action.payload);
     },
+    gameOver: (state) => {
+      state.gameOver = true;
+    },
   },
 });
 
@@ -75,6 +79,7 @@ export const {
   revealCard,
   addPlayer,
   removePlayer,
+  gameOver,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
