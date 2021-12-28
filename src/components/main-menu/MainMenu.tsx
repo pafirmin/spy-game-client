@@ -2,8 +2,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Player } from "../../features/game/game.slice";
-import { updatePlayer } from "../../features/player/player.slice";
+import { Player, updatePlayer } from "../../features/player/player.slice";
 import socket from "../../services/socket";
 
 const MainMenu = () => {
@@ -15,12 +14,13 @@ const MainMenu = () => {
     team: null,
   });
 
+  const onGameCreated = (name: string) => navigate(`/${name}`);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const handleCreateRoom = () => {
-    console.log(values);
     dispatch(updatePlayer(values));
     socket.emit("create", values.room);
   };
@@ -31,11 +31,9 @@ const MainMenu = () => {
   };
 
   useEffect(() => {
-    const onGameCreated = (name: string) => navigate(`/${name}`);
-
     socket.on("gameCreated", onGameCreated);
 
-    return () => void socket.off("gameCreated");
+    return () => void socket.off("gameCreated", onGameCreated);
   }, []);
 
   return (

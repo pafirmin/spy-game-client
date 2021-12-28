@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Player } from "../game/game.slice";
+
+export interface Player {
+  name: string;
+  room: string;
+  team: Teams | null;
+  isSpymaster: boolean;
+}
 
 const initialState: Player = {
   name: "",

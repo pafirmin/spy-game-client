@@ -3,13 +3,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import Board from "../../components/board";
-import Roster from "../../components/roster/Roster";
+import Roster from "../../components/roster";
 import ScoreBoard from "../../components/scoreboard/ScoreBoard";
 import socket from "../../services/socket";
+import { Player } from "../player/player.slice";
 import {
   assignSpymaster,
   Card,
-  Player,
   revealCard,
   startGame,
   addPlayer,
@@ -52,20 +52,15 @@ const Game = () => {
   }, []);
 
   return (
-    <Grid
-      container
-      xs={12}
-      spacing={2}
-      justifyContent="space-between"
-      wrap="nowrap"
-    >
-      <Grid xs={2} item>
+    <Grid container xs={12} justifyContent="center" wrap="nowrap">
+      <Grid xs={0} lg={2} item>
         <Roster team={Teams.RED} />
       </Grid>
       <Grid
         container
         item
-        xs={8}
+        xs={12}
+        lg={6}
         direction="column"
         justifyContent="center"
         style={{ maxWidth: "1200px" }}
@@ -77,7 +72,7 @@ const Game = () => {
           <Board />
         </Grid>
       </Grid>
-      <Grid xs={2} item>
+      <Grid xs={0} lg={2} item>
         <Roster team={Teams.BLUE} />
       </Grid>
     </Grid>

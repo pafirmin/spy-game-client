@@ -8,9 +8,14 @@ const Board = () => {
   const cards = useSelector(selectAllCards);
 
   return (
-    <Grid spacing={4} container>
+    <Grid spacing={1} container>
       {cards.map((card) => (
-        <Grid style={{ flexBasis: "20%", maxWidth: "20%" }} xs={2} item>
+        <Grid
+          item
+          key={card.word}
+          style={{ flexBasis: "20%", maxWidth: "20%" }}
+          xs={2}
+        >
           <Card card={card} />
         </Grid>
       ))}

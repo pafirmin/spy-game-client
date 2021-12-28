@@ -1,16 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { Player } from "../player/player.slice";
 
 export enum Teams {
   RED = "red",
   BLUE = "blue",
-}
-
-export interface Player {
-  name: string;
-  room: string;
-  team: Teams | null;
-  isSpymaster: boolean;
 }
 
 export interface Card {
