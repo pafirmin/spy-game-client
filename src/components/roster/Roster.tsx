@@ -1,4 +1,11 @@
-import { Button, Drawer, Grid, List, ListItem } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Drawer,
+  Grid,
+  List,
+  ListItem,
+} from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
@@ -13,11 +20,15 @@ interface Props {
 
 const Roster = ({ team }: Props) => {
   const classes = useStyles({ team });
-  const players = useSelector((state: RootState) => state.game.players);
+  const { players, started } = useSelector((state: RootState) => state.game);
   const localPlayer = useSelector((state: RootState) => state.player);
 
   const handleSpymaster = () => {
-    socket.emit("assignSpymaster", localPlayer);
+    socket.emit("assignSpymaster");
+  };
+
+  const handleSwitchTeams = () => {
+    socket.emit("switchTeam");
   };
 
   return (
@@ -50,13 +61,12 @@ const Roster = ({ team }: Props) => {
           </List>
         </Grid>
         <Grid item>
-          <Button
-            onClick={handleSpymaster}
-            style={{ width: "100%" }}
-            variant="contained"
-          >
-            Spymaster
-          </Button>
+          <ButtonGroup fullWidth variant="contained" orientation="vertical">
+            <Button onClick={handleSpymaster}>Spymaster</Button>
+            {!started && (
+              <Button onClick={handleSwitchTeams}>Switch team</Button>
+            )}
+          </ButtonGroup>
         </Grid>
       </Grid>
     </Drawer>

@@ -4,21 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RootState } from "../../app/store";
 import Board from "../../components/board";
+import GameControl from "../../components/game-control";
 import Roster from "../../components/roster";
-import ScoreBoard from "../../components/scoreboard/ScoreBoard";
+import ScoreBoard from "../../components/scoreboard";
 import socket from "../../services/socket";
-import { Player, updatePlayer } from "../player/player.slice";
+import { Player, switchTeams, updatePlayer } from "../player/player.slice";
 import {
   assignSpymaster,
-  Card,
-  revealCard,
   startGame,
   addPlayer,
   Teams,
   updateGame,
   GameState,
   removePlayer,
-  gameOver,
 } from "./game.slice";
 
 const Game = () => {
@@ -30,37 +28,39 @@ const Game = () => {
     dispatch(updateGame(game));
     dispatch(updatePlayer(player));
   };
+  const onGameReset = (game: GameState) => {
+    dispatch(updateGame(game));
+    dispatch(updatePlayer({ isSpymaster: false }));
+  };
+  const onGameUpdated = (game: GameState) => dispatch(updateGame(game));
   const onNewUserJoined = (player: Player) => dispatch(addPlayer(player));
   const onGameStarted = () => dispatch(startGame());
-  const onCardRevealed = (card: Card) => dispatch(revealCard(card));
+  const onTeamSwitched = (player: Player) => dispatch(switchTeams(player));
   const onPlayerLeft = (name: string) => dispatch(removePlayer(name));
   const onSpymasterAsssigned = (player: Player) =>
     dispatch(assignSpymaster(player));
-  const onNewGameStarted = (newGame: GameState) =>
-    dispatch(updateGame(newGame));
-  const onGameOver = () => dispatch(gameOver());
 
   useEffect(() => {
     socket.emit("join", player, room);
+    socket.on("updateGame", onGameUpdated);
+    socket.on("newGame", onGameReset);
     socket.on("gameJoined", onGameJoined);
     socket.on("playerLeft", onPlayerLeft);
     socket.on("newUserJoined", onNewUserJoined);
+    socket.on("teamSwitched", onTeamSwitched);
     socket.on("gameStarted", onGameStarted);
-    socket.on("cardRevealed", onCardRevealed);
     socket.on("spymasterAssigned", onSpymasterAsssigned);
-    socket.on("newGame", onNewGameStarted);
-    socket.on("gameOver", onGameOver);
 
     return () => {
       socket.emit("leaveGame", player);
       socket.off("gameJoined", onGameJoined);
+      socket.off("newGame", onGameReset);
       socket.off("newUserJoined", onNewUserJoined);
       socket.off("gameStarted", onGameStarted);
-      socket.off("cardRevealed", onCardRevealed);
       socket.off("spymasterAssigned", onSpymasterAsssigned);
+      socket.off("teamSwitched", onTeamSwitched);
       socket.off("playerLeft", onPlayerLeft);
-      socket.off("newGame", onNewGameStarted);
-      socket.off("gameOver", onGameOver);
+      socket.off("updateGame", onGameUpdated);
     };
   }, []);
 
@@ -74,16 +74,14 @@ const Game = () => {
         item
         xs={12}
         lg={6}
+        gap={3}
         direction="column"
-        justifyContent="center"
-        style={{ maxWidth: "1200px" }}
+        justifyContent="flex-start"
+        style={{ maxWidth: "1200px", height: "100vh" }}
       >
-        <Grid item>
-          <ScoreBoard />
-        </Grid>
-        <Grid item>
-          <Board />
-        </Grid>
+        <ScoreBoard />
+        <Board />
+        <GameControl />
       </Grid>
       <Grid xs={0} lg={2} item>
         <Roster team={Teams.BLUE} />

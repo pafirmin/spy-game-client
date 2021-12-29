@@ -5,18 +5,22 @@ import { RootState } from "../../app/store";
 import { Teams } from "../../features/game/game.slice";
 
 const ScoreBoard = () => {
-  const scores = useSelector((state: RootState) => state.game.scores);
+  const { remainingRed, remainingBlue, activeTeam, gameOver } = useSelector(
+    (state: RootState) => state.game
+  );
 
   return (
-    <Box>
-      <Grid container justifyContent="center">
-        <Grid item>
+    <Grid container item justifyContent="center">
+      <Grid item>
+        <Box>
           <Typography variant="h2">
-            {scores[Teams.RED]} - {scores[Teams.BLUE]}
+            {gameOver
+              ? (activeTeam === Teams.RED ? "RED TEAM" : "BLUE TEAM") + " WINS!"
+              : `${remainingRed} - ${remainingBlue}`}
           </Typography>
-        </Grid>
+        </Box>
       </Grid>
-    </Box>
+    </Grid>
   );
 };
 

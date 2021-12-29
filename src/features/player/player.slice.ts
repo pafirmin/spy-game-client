@@ -24,16 +24,22 @@ export const playerSlice = createSlice({
     updatePlayer: (state, action: PayloadAction<Partial<Player>>) => {
       return Object.assign(state, action.payload);
     },
+    switchTeams: (state, action: PayloadAction<Player>) => {
+      console.log("Hello");
+      if (state.id === action.payload.id) {
+        return Object.assign(state, action.payload);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(assignSpymaster, (state, action: PayloadAction<Player>) => {
-      if (state.name === action.payload.name) {
+      if (state.id === action.payload.id) {
         return Object.assign(state, action.payload);
       }
     });
   },
 });
 
-export const { updatePlayer } = playerSlice.actions;
+export const { updatePlayer, switchTeams } = playerSlice.actions;
 
 export default playerSlice.reducer;

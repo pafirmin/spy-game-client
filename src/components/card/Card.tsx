@@ -1,7 +1,9 @@
+import { QuestionMark } from "@mui/icons-material";
 import { Grid, Paper, Typography } from "@mui/material";
 import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
+import { showWarning } from "../../features/alerts/alerts.slice";
 import { Card as ICard } from "../../features/game/game.slice";
 import socket from "../../services/socket";
 import useStyles from "./card.styles";
@@ -12,13 +14,24 @@ interface Props {
 
 const Card = ({ card }: Props) => {
   const classes = useStyles(card);
+  const dispatch = useDispatch();
   const player = useSelector((state: RootState) => state.player);
+  const { gameOver, started, activeTeam } = useSelector(
+    (state: RootState) => state.game
+  );
   const shouldReveal = useMemo(
-    () => card.isRevealed || player.isSpymaster,
+    () => card.isRevealed || player.isSpymaster || gameOver,
     [player, card]
   );
 
   const handleReveal = () => {
+    if (!started) {
+      dispatch(showWarning("The game hasn't started yet!"));
+      return;
+    } else if (player.team !== activeTeam) {
+      dispatch(showWarning("Wait your turn!"));
+      return;
+    }
     socket.emit("reveal", card);
   };
 
@@ -31,7 +44,7 @@ const Card = ({ card }: Props) => {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item className={classes.cardContent} onClick={handleReveal}>
           <Typography className={classes.text} variant="h5" color="inherit">
-            {card.word}
+            {started ? card.word : <QuestionMark fontSize="large" />}
           </Typography>
         </Grid>
       </Grid>

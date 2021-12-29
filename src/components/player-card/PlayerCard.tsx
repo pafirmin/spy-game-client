@@ -12,7 +12,7 @@ interface Props {
 
 const PlayerCard = ({ player, isUser }: Props) => {
   const classes = useStyles({ team: player.team as Teams });
-  console.log(player);
+
   return (
     <Card className={classes.card}>
       <Avatar className={classes.avatar}>

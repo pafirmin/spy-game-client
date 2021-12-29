@@ -15,13 +15,14 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
     position: "relative",
     cursor: "pointer",
   },
-  revealed: ({ team }) => ({
-    background:
-      team === Teams.RED
-        ? "linear-gradient(to top, #FE6B8B 30%, #FF8E53 90%)"
-        : team === Teams.BLUE
-        ? "linear-gradient(to top, #2196F3 30%, #21CBF3 90%)"
-        : "linear-gradient(to top, #ffe599 30%, #fff4df 90%);",
+  revealed: ({ team, isAssassin }) => ({
+    background: isAssassin
+      ? "linear-gradient(to top, #0d0d0d 30%, #6d6180 90%)"
+      : team === Teams.RED
+      ? "linear-gradient(to top, #FE6B8B 30%, #FF8E53 90%)"
+      : team === Teams.BLUE
+      ? "linear-gradient(to top, #2196F3 30%, #21CBF3 90%)"
+      : "linear-gradient(to top, #ffe599 30%, #fff4df 90%);",
     color: team ? "white" : "#535353;",
   }),
   cardContent: {

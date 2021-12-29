@@ -8,7 +8,7 @@ const Board = () => {
   const cards = useSelector(selectAllCards);
 
   return (
-    <Grid spacing={1} container>
+    <Grid spacing={1} container item>
       {cards.map((card) => (
         <Grid
           item

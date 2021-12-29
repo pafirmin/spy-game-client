@@ -14,7 +14,7 @@ const MainMenu = () => {
     team: null,
   });
 
-  const onGameCreated = (name: string) => navigate(`/${name}`);
+  const onSuccess = (name: string) => navigate(`/${name}`);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -27,13 +27,13 @@ const MainMenu = () => {
 
   const handleJoinRoom = () => {
     dispatch(updatePlayer({ name: values.name, team: values.team }));
-    navigate(`/${values.room}`);
+    socket.emit("findGame", values.room);
   };
 
   useEffect(() => {
-    socket.on("gameCreated", onGameCreated);
+    socket.on("gameFound", onSuccess);
 
-    return () => void socket.off("gameCreated", onGameCreated);
+    return () => void socket.off("gameFound", onSuccess);
   }, []);
 
   return (
