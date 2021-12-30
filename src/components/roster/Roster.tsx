@@ -6,7 +6,7 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { Teams } from "../../features/game/game.slice";
@@ -22,6 +22,17 @@ const Roster = ({ team }: Props) => {
   const classes = useStyles({ team });
   const { players, started } = useSelector((state: RootState) => state.game);
   const localPlayer = useSelector((state: RootState) => state.player);
+  const spyMasterAssigned = useMemo(
+    () => players.some((player) => player.isSpymaster && player.team === team),
+    [players]
+  );
+  const teamPlayers = useMemo(
+    () =>
+      players
+        .filter((player) => player.team === team)
+        .sort((player) => (player.isSpymaster ? -1 : 1)),
+    [players]
+  );
 
   const handleSpymaster = () => {
     socket.emit("assignSpymaster");
@@ -30,6 +41,8 @@ const Roster = ({ team }: Props) => {
   const handleSwitchTeams = () => {
     socket.emit("switchTeam");
   };
+
+  console.log(players);
 
   return (
     <Drawer
@@ -47,27 +60,28 @@ const Roster = ({ team }: Props) => {
       >
         <Grid item>
           <List className={classes.list}>
-            {players
-              .filter((player) => player.team === team)
-              .sort((player) => (player.isSpymaster ? -1 : 1))
-              .map((player) => (
-                <ListItem key={player.name}>
-                  <PlayerCard
-                    player={player}
-                    isUser={localPlayer.name === player.name}
-                  />
-                </ListItem>
-              ))}
+            {teamPlayers.map((player) => (
+              <ListItem key={player.name}>
+                <PlayerCard
+                  player={player}
+                  isUser={localPlayer.name === player.name}
+                />
+              </ListItem>
+            ))}
           </List>
         </Grid>
-        <Grid item>
-          <ButtonGroup fullWidth variant="contained" orientation="vertical">
-            <Button onClick={handleSpymaster}>Spymaster</Button>
-            {!started && (
-              <Button onClick={handleSwitchTeams}>Switch team</Button>
-            )}
-          </ButtonGroup>
-        </Grid>
+        {localPlayer.team === team && (
+          <Grid item>
+            <ButtonGroup fullWidth variant="contained" orientation="vertical">
+              {!spyMasterAssigned && (
+                <Button onClick={handleSpymaster}>Spymaster</Button>
+              )}
+              {!started && (
+                <Button onClick={handleSwitchTeams}>Switch team</Button>
+              )}
+            </ButtonGroup>
+          </Grid>
+        )}
       </Grid>
     </Drawer>
   );

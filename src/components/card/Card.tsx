@@ -1,4 +1,4 @@
-import { QuestionMark } from "@mui/icons-material";
+import { QuestionMark, Visibility } from "@mui/icons-material";
 import { Grid, Paper, Typography } from "@mui/material";
 import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,6 +41,7 @@ const Card = ({ card }: Props) => {
         classes.card + " " + (shouldReveal ? classes.revealed : classes.hidden)
       }
     >
+      {card.isRevealed && <Visibility className={classes.visibility} />}
       <Grid container justifyContent="center" alignItems="center">
         <Grid item className={classes.cardContent} onClick={handleReveal}>
           <Typography className={classes.text} variant="h5" color="inherit">

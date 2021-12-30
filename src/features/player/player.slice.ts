@@ -4,17 +4,17 @@ import { Teams, assignSpymaster } from "../game/game.slice";
 export interface Player {
   id: string;
   name: string;
-  room: string;
   team: Teams | null;
   isSpymaster: boolean;
+  disconnected: boolean;
 }
 
 const initialState: Player = {
-  id: "",
+  id: localStorage.getItem("id") || "",
   name: "",
-  room: "",
   team: null,
   isSpymaster: false,
+  disconnected: false,
 };
 
 export const playerSlice = createSlice({
@@ -25,7 +25,6 @@ export const playerSlice = createSlice({
       return Object.assign(state, action.payload);
     },
     switchTeams: (state, action: PayloadAction<Player>) => {
-      console.log("Hello");
       if (state.id === action.payload.id) {
         return Object.assign(state, action.payload);
       }

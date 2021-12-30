@@ -1,7 +1,11 @@
-import { Face, FaceRetouchingNatural, SupportAgent } from "@mui/icons-material";
+import {
+  Face,
+  FaceRetouchingNatural,
+  FlashOff,
+  SupportAgent,
+} from "@mui/icons-material";
 import { Avatar, Card, Typography } from "@mui/material";
 import React from "react";
-import { Teams } from "../../features/game/game.slice";
 import { Player } from "../../features/player/player.slice";
 import useStyles from "./player-card.styles";
 
@@ -11,12 +15,14 @@ interface Props {
 }
 
 const PlayerCard = ({ player, isUser }: Props) => {
-  const classes = useStyles({ team: player.team as Teams });
+  const classes = useStyles({ player });
 
   return (
     <Card className={classes.card}>
       <Avatar className={classes.avatar}>
-        {player.isSpymaster ? (
+        {player.disconnected ? (
+          <FlashOff />
+        ) : player.isSpymaster ? (
           <SupportAgent />
         ) : isUser ? (
           <FaceRetouchingNatural />

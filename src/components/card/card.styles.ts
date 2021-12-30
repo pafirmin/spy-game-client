@@ -23,8 +23,13 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
       : team === Teams.BLUE
       ? "linear-gradient(to top, #2196F3 30%, #21CBF3 90%)"
       : "linear-gradient(to top, #ffe599 30%, #fff4df 90%);",
-    color: team ? "white" : "#535353;",
+    color: team || isAssassin ? "white" : "#535353;",
   }),
+  visibility: {
+    position: "absolute",
+    top: ".4rem",
+    right: ".5rem",
+  },
   cardContent: {
     position: "absolute",
     top: 0,

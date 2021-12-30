@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updatePlayer } from "../../features/player/player.slice";
 import socket from "../../services/socket";
+import axios from "axios";
+import { showError } from "../../features/alerts/alerts.slice";
 
 const MainMenu = () => {
   const navigate = useNavigate();
@@ -20,14 +22,37 @@ const MainMenu = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleCreateRoom = () => {
-    dispatch(updatePlayer({ name: values.name, team: values.team }));
-    socket.emit("create", values.room);
+  const handleCreateRoom = async () => {
+    try {
+      dispatch(updatePlayer({ name: values.name, team: values.team }));
+
+      const res = await axios.post("http://localhost:2000/games", {
+        name: values.room,
+      });
+
+      if (res.status === 201) {
+        navigate(`/${values.room}`);
+      }
+    } catch (err) {
+      dispatch(showError(err.response.data.message));
+    }
+    // dispatch(updatePlayer({ name: values.name, team: values.team }));
+    // socket.emit("create", values.room);
   };
 
-  const handleJoinRoom = () => {
-    dispatch(updatePlayer({ name: values.name, team: values.team }));
-    socket.emit("findGame", values.room);
+  const handleJoinRoom = async () => {
+    try {
+      dispatch(updatePlayer({ name: values.name, team: values.team }));
+
+      const res = await axios.get(`http://localhost:2000/games/${values.room}`);
+
+      if (res.status === 200) {
+        navigate(`/${values.room}`);
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch(showError(err.response.data.message));
+    }
   };
 
   useEffect(() => {

@@ -10,7 +10,7 @@ const Alerts = () => {
   const [open, setOpen] = useState<boolean>(false);
   const alerts = useSelector((state: RootState) => state.alerts);
   const dispatch = useDispatch();
-  const onGameError = (err: any) => dispatch(showError(err.message));
+  const onGameError = (err: string) => dispatch(showError(err));
 
   useEffect(() => {
     socket.on("gameError", onGameError);

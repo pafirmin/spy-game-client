@@ -10,13 +10,15 @@ import ScoreBoard from "../../components/scoreboard";
 import socket from "../../services/socket";
 import { Player, switchTeams, updatePlayer } from "../player/player.slice";
 import {
+  Teams,
   assignSpymaster,
   startGame,
   addPlayer,
-  Teams,
-  updateGame,
   GameState,
+  updateGame,
   removePlayer,
+  endTurn,
+  playerDisconnected,
 } from "./game.slice";
 
 const Game = () => {
@@ -25,6 +27,7 @@ const Game = () => {
   const { room } = useParams();
 
   const onGameJoined = (game: GameState, player: Player) => {
+    localStorage.setItem("id", player.id);
     dispatch(updateGame(game));
     dispatch(updatePlayer(player));
   };
@@ -36,9 +39,13 @@ const Game = () => {
   const onNewUserJoined = (player: Player) => dispatch(addPlayer(player));
   const onGameStarted = () => dispatch(startGame());
   const onTeamSwitched = (player: Player) => dispatch(switchTeams(player));
-  const onPlayerLeft = (name: string) => dispatch(removePlayer(name));
+  const onPlayerLeft = (player: Player) => dispatch(removePlayer(player));
   const onSpymasterAsssigned = (player: Player) =>
     dispatch(assignSpymaster(player));
+  const onTurnEnded = () => dispatch(endTurn());
+  const onReconnect = () => socket.emit("rejoin", player, room);
+  const onPlayerDisconnect = (player: Player) =>
+    dispatch(playerDisconnected(player));
 
   useEffect(() => {
     socket.emit("join", player, room);
@@ -50,8 +57,12 @@ const Game = () => {
     socket.on("teamSwitched", onTeamSwitched);
     socket.on("gameStarted", onGameStarted);
     socket.on("spymasterAssigned", onSpymasterAsssigned);
+    socket.on("turnEnded", onTurnEnded);
+    socket.on("playerDisconnected", onPlayerDisconnect);
+    socket.on("reconnect", onReconnect);
 
     return () => {
+      dispatch(updatePlayer({ isSpymaster: false }));
       socket.emit("leaveGame", player);
       socket.off("gameJoined", onGameJoined);
       socket.off("newGame", onGameReset);
@@ -61,6 +72,9 @@ const Game = () => {
       socket.off("teamSwitched", onTeamSwitched);
       socket.off("playerLeft", onPlayerLeft);
       socket.off("updateGame", onGameUpdated);
+      socket.off("turnEnded", onTurnEnded);
+      socket.off("playerDisconnected", onPlayerDisconnect);
+      socket.off("reconnect", onReconnect);
     };
   }, []);
 

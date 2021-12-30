@@ -20,8 +20,6 @@ export interface GameState {
   players: Player[];
   scores: { [Teams.RED]: number; [Teams.BLUE]: number };
   cards: Card[];
-  remainingRed: number;
-  remainingBlue: number;
   started: boolean;
   activeTeam: Teams | null;
   gameOver: boolean;
@@ -35,8 +33,6 @@ const initialState: GameState = {
     [Teams.BLUE]: 0,
   },
   cards: [],
-  remainingRed: 0,
-  remainingBlue: 0,
   started: false,
   gameOver: false,
   activeTeam: null,
@@ -58,10 +54,27 @@ export const gameSlice = createSlice({
       state.started = true;
     },
     addPlayer: (state, action: PayloadAction<Player>) => {
-      state.players.push(action.payload);
+      const player = state.players.find((p) => p.id === action.payload.id);
+
+      if (player) {
+        state.players = state.players.map((p) =>
+          p.id === action.payload.id ? action.payload : p
+        );
+      } else {
+        state.players.push(action.payload);
+      }
     },
-    removePlayer: (state, action: PayloadAction<string>) => {
-      state.players = state.players.filter((p) => p.id !== action.payload);
+    removePlayer: (state, action: PayloadAction<Player>) => {
+      state.players = state.players.filter((p) => p.id !== action.payload.id);
+    },
+    playerDisconnected: (state, action: PayloadAction<Player>) => {
+      state.players = state.players.map((p) =>
+        p.id === action.payload.id ? { ...p, disconnected: true } : p
+      );
+    },
+    endTurn: (state) => {
+      state.activeTeam =
+        state.activeTeam === Teams.BLUE ? Teams.RED : Teams.BLUE;
     },
   },
   extraReducers: (builder) => {
@@ -81,6 +94,8 @@ export const {
   startGame,
   addPlayer,
   removePlayer,
+  endTurn,
+  playerDisconnected,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
