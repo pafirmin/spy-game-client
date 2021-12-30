@@ -20,7 +20,9 @@ interface Props {
 
 const Roster = ({ team }: Props) => {
   const classes = useStyles({ team });
-  const { players, started } = useSelector((state: RootState) => state.game);
+  const { players, started, activeTeam } = useSelector(
+    (state: RootState) => state.game
+  );
   const localPlayer = useSelector((state: RootState) => state.player);
   const spyMasterAssigned = useMemo(
     () => players.some((player) => player.isSpymaster && player.team === team),
@@ -42,14 +44,16 @@ const Roster = ({ team }: Props) => {
     socket.emit("switchTeam");
   };
 
-  console.log(players);
-
   return (
     <Drawer
       variant="permanent"
       anchor={team === Teams.RED ? "left" : "right"}
       className={classes.drawer}
-      classes={{ paper: classes.paper }}
+      classes={{
+        paper: `${classes.paper} ${
+          started && team !== activeTeam && classes.inactive
+        }`,
+      }}
     >
       <Grid
         container

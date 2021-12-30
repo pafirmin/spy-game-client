@@ -21,6 +21,7 @@ export interface GameState {
   scores: { [Teams.RED]: number; [Teams.BLUE]: number };
   cards: Card[];
   started: boolean;
+  startingTeam: Teams | null;
   activeTeam: Teams | null;
   gameOver: boolean;
 }
@@ -28,6 +29,7 @@ export interface GameState {
 const initialState: GameState = {
   name: "",
   players: [],
+  startingTeam: null,
   scores: {
     [Teams.RED]: 0,
     [Teams.BLUE]: 0,
@@ -52,6 +54,7 @@ export const gameSlice = createSlice({
     },
     startGame: (state) => {
       state.started = true;
+      state.activeTeam = state.startingTeam;
     },
     addPlayer: (state, action: PayloadAction<Player>) => {
       const player = state.players.find((p) => p.id === action.payload.id);
