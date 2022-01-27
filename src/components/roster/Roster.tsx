@@ -5,7 +5,10 @@ import {
   Grid,
   List,
   ListItem,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { LayoutGroup, motion } from "framer-motion";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
@@ -19,11 +22,14 @@ interface Props {
 }
 
 const Roster = ({ team }: Props) => {
+  const theme = useTheme();
+  const breakpoint = useMediaQuery(theme.breakpoints.up("lg"));
   const classes = useStyles({ team });
   const { players, started, activeTeam } = useSelector(
     (state: RootState) => state.game
   );
   const localPlayer = useSelector((state: RootState) => state.player);
+  const { openDrawers } = useSelector((state: RootState) => state.layout);
   const spyMasterAssigned = useMemo(
     () => players.some((player) => player.isSpymaster && player.team === team),
     [players]
@@ -44,7 +50,44 @@ const Roster = ({ team }: Props) => {
     socket.emit("switchTeam");
   };
 
-  return (
+  const drawerContent = (
+    <Grid
+      container
+      direction="column"
+      alignItems="stretch"
+      justifyContent="space-between"
+      style={{ height: "100%", padding: ".4rem" }}
+    >
+      <Grid item>
+        <LayoutGroup>
+          <List component={motion.ul} layout className={classes.list}>
+            {teamPlayers.map((player) => (
+              <ListItem layout component={motion.li} key={player.id}>
+                <PlayerCard
+                  player={player}
+                  isUser={localPlayer.name === player.name}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </LayoutGroup>
+      </Grid>
+      {localPlayer.team === team && (
+        <Grid item>
+          <ButtonGroup fullWidth variant="contained" orientation="vertical">
+            {!spyMasterAssigned && (
+              <Button onClick={handleSpymaster}>Spymaster</Button>
+            )}
+            {!started && (
+              <Button onClick={handleSwitchTeams}>Switch team</Button>
+            )}
+          </ButtonGroup>
+        </Grid>
+      )}
+    </Grid>
+  );
+
+  return breakpoint ? (
     <Drawer
       variant="permanent"
       anchor={team === Teams.RED ? "left" : "right"}
@@ -55,38 +98,21 @@ const Roster = ({ team }: Props) => {
         }`,
       }}
     >
-      <Grid
-        container
-        direction="column"
-        alignItems="stretch"
-        justifyContent="space-between"
-        style={{ height: "100%", padding: ".4rem" }}
-      >
-        <Grid item>
-          <List className={classes.list}>
-            {teamPlayers.map((player) => (
-              <ListItem key={player.name}>
-                <PlayerCard
-                  player={player}
-                  isUser={localPlayer.name === player.name}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-        {localPlayer.team === team && (
-          <Grid item>
-            <ButtonGroup fullWidth variant="contained" orientation="vertical">
-              {!spyMasterAssigned && (
-                <Button onClick={handleSpymaster}>Spymaster</Button>
-              )}
-              {!started && (
-                <Button onClick={handleSwitchTeams}>Switch team</Button>
-              )}
-            </ButtonGroup>
-          </Grid>
-        )}
-      </Grid>
+      {drawerContent}
+    </Drawer>
+  ) : (
+    <Drawer
+      variant="temporary"
+      open={openDrawers}
+      anchor={team === Teams.RED ? "left" : "right"}
+      className={classes.drawer}
+      classes={{
+        paper: `${classes.paper} ${
+          started && team !== activeTeam && classes.inactive
+        }`,
+      }}
+    >
+      {drawerContent}
     </Drawer>
   );
 };

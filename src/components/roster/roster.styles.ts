@@ -8,11 +8,8 @@ interface StyleProps {
 
 const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
   paper: ({ team }) => ({
-    width: "0%",
     maxWidth: "300px",
-    [theme.breakpoints.up("lg")]: {
-      width: "25%",
-    },
+    width: "48%",
     background:
       team === Teams.RED
         ? `linear-gradient(to bottom, #FE6B8B 30%, #FF8E53 90%)`

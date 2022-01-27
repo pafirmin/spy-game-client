@@ -7,7 +7,7 @@ interface StyleProps extends Card {}
 const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
   hidden: {
     background: "linear-gradient(to top, #fffadf 30%, white 90%);",
-    color: "#535353",
+    color: "#555",
   },
   card: {
     height: 0,
@@ -48,7 +48,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
     },
   },
   text: ({ word }) => ({
-    fontSize: word.length > 8 ? ".85em" : "1em",
+    fontSize: word.length > 10 ? ".75em" : word.length > 6 ? ".85em" : "1em",
   }),
 }));
 

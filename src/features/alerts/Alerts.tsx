@@ -40,6 +40,9 @@ const Alerts = () => {
       autoHideDuration={6000}
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
+      sx={{
+        bottom: "12%",
+      }}
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "center",

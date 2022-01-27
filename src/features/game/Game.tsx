@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { RootState } from "../../app/store";
 import Board from "../../components/board";
 import GameControl from "../../components/game-control";
+import MenuButton from "../../components/menu-button";
 import Roster from "../../components/roster";
 import ScoreBoard from "../../components/scoreboard";
 import socket from "../../services/socket";
@@ -79,13 +80,14 @@ const Game = () => {
   }, []);
 
   return (
-    <Grid container xs={12} justifyContent="center" wrap="nowrap">
+    <Grid container justifyContent="center" wrap="nowrap">
       <Grid xs={0} lg={2} item>
         <Roster team={Teams.RED} />
       </Grid>
       <Grid
         container
         item
+        wrap="nowrap"
         xs={12}
         lg={6}
         gap={3}
@@ -100,6 +102,7 @@ const Game = () => {
       <Grid xs={0} lg={2} item>
         <Roster team={Teams.BLUE} />
       </Grid>
+      <MenuButton />
     </Grid>
   );
 };
