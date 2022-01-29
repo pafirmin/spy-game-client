@@ -15,8 +15,8 @@ function App() {
         <Alerts />
         <Router>
           <Routes>
-            <Route exact path="/" element={<MainMenu />} />
-            <Route path="/:room" element={<Game />} />
+            <Route path="/" element={<MainMenu />} />
+            <Route path="/rooms/:room" element={<Game />} />
           </Routes>
         </Router>
       </Container>
