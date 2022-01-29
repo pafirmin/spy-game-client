@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/spy-game-client/static/css/main.c6bebc4e.css",
-    "main.js": "/spy-game-client/static/js/main.7d2fe3a3.js",
+    "main.js": "/spy-game-client/static/js/main.6001566c.js",
     "index.html": "/spy-game-client/index.html",
     "main.c6bebc4e.css.map": "/spy-game-client/static/css/main.c6bebc4e.css.map",
-    "main.7d2fe3a3.js.map": "/spy-game-client/static/js/main.7d2fe3a3.js.map"
+    "main.6001566c.js.map": "/spy-game-client/static/js/main.6001566c.js.map"
   },
   "entrypoints": [
     "static/css/main.c6bebc4e.css",
-    "static/js/main.7d2fe3a3.js"
+    "static/js/main.6001566c.js"
   ]
 }
