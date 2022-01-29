@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/spy-game-client/static/css/main.c6bebc4e.css",
+    "main.js": "/spy-game-client/static/js/main.57a3c774.js",
+    "index.html": "/spy-game-client/index.html",
+    "main.c6bebc4e.css.map": "/spy-game-client/static/css/main.c6bebc4e.css.map",
+    "main.57a3c774.js.map": "/spy-game-client/static/js/main.57a3c774.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c6bebc4e.css",
+    "static/js/main.57a3c774.js"
+  ]
+}
