@@ -26,9 +26,12 @@ const MainMenu = () => {
     try {
       dispatch(updatePlayer({ name: values.name, team: values.team }));
 
-      const res = await axios.post("http://localhost:2000/games", {
-        name: values.room,
-      });
+      const res = await axios.post(
+        "https://obscure-oasis-37328.herokuapp.com/games",
+        {
+          name: values.room,
+        }
+      );
 
       if (res.status === 201) {
         navigate(`/${values.room}`);
@@ -44,7 +47,9 @@ const MainMenu = () => {
     try {
       dispatch(updatePlayer({ name: values.name, team: values.team }));
 
-      const res = await axios.get(`http://localhost:2000/games/${values.room}`);
+      const res = await axios.get(
+        `https://obscure-oasis-37328.herokuapp.com/games/${values.room}`
+      );
 
       if (res.status === 200) {
         navigate(`/${values.room}`);
