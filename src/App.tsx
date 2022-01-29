@@ -15,7 +15,7 @@ function App() {
         <Alerts />
         <Router>
           <Routes>
-            <Route path="/" element={<MainMenu />} />
+            <Route exact path="/" element={<MainMenu />} />
             <Route path="/:room" element={<Game />} />
           </Routes>
         </Router>
