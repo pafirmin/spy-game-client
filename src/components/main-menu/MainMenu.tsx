@@ -16,7 +16,7 @@ const MainMenu = () => {
     team: null,
   });
 
-  const onSuccess = (name: string) => navigate(`/rooms/${name}`);
+  const onSuccess = (name: string) => navigate(`/${name}`);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });

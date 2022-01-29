@@ -21,7 +21,7 @@ function App() {
         <HashRouter>
           <Routes>
             <Route path="/" element={<MainMenu />} />
-            <Route path="/rooms/:room" element={<Game />} />
+            <Route path="/:room" element={<Game />} />
           </Routes>
         </HashRouter>
       </Container>
