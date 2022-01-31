@@ -12,14 +12,12 @@ const ScoreBoard = () => {
     () =>
       cards.reduce(
         (obj, card) => {
-          if (card.team === Teams.RED) {
-            obj.red++;
-          } else if (card.team === Teams.BLUE) {
-            obj.blue++;
+          if (!card.isRevealed) {
+            obj[card.team]++;
           }
           return obj;
         },
-        { red: 0, blue: 0 }
+        { [Teams.RED]: 0, [Teams.BLUE]: 0 }
       ),
     [cards]
   );
@@ -28,10 +26,10 @@ const ScoreBoard = () => {
     <Grid container item justifyContent="center">
       <Grid item>
         <Box>
-          <Typography variant="h2">
+          <Typography variant="h2" textAlign="center">
             {gameOver
               ? (activeTeam === Teams.RED ? "RED TEAM" : "BLUE TEAM") + " WINS!"
-              : `${remainingCards.red} - ${remainingCards.blue}`}
+              : `${remainingCards[Teams.RED]} - ${remainingCards[Teams.BLUE]}`}
           </Typography>
         </Box>
       </Grid>

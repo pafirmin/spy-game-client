@@ -106,6 +106,8 @@ const Roster = ({ team }: Props) => {
       open={openDrawers}
       anchor={team === Teams.RED ? "left" : "right"}
       className={classes.drawer}
+      ModalProps={{ sx: { width: 0 } }}
+      BackdropProps={{ sx: { display: "none" } }}
       classes={{
         paper: `${classes.paper} ${
           started && team !== activeTeam && classes.inactive

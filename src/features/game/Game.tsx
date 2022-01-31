@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -23,6 +23,8 @@ import {
 } from "./game.slice";
 
 const Game = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("lg"));
   const dispatch = useDispatch();
   const player = useSelector((state: RootState) => state.player);
   const { room } = useParams();
@@ -102,7 +104,7 @@ const Game = () => {
       <Grid xs={0} lg={2} item>
         <Roster team={Teams.BLUE} />
       </Grid>
-      <MenuButton />
+      {isSmallScreen && <MenuButton />}
     </Grid>
   );
 };

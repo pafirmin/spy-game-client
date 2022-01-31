@@ -10,8 +10,6 @@ const MenuButton = () => {
   const { openDrawers } = useSelector((state: RootState) => state.layout);
   const classes = useStyles();
 
-  console.log(openDrawers);
-
   const handleClick = () => {
     dispatch(toggleDrawers());
   };

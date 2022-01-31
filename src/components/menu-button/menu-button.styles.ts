@@ -7,7 +7,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
     border: "none",
     cursor: "pointer",
     position: "absolute",
-    bottom: "18px",
+    bottom: "90px",
     left: "50%",
     transform: "translateX(-50%)",
     width: "50px",
