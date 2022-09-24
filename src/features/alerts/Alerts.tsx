@@ -10,13 +10,14 @@ const Alerts = () => {
   const [open, setOpen] = useState<boolean>(false);
   const alerts = useSelector((state: RootState) => state.alerts);
   const dispatch = useDispatch();
-  const onGameError = (err: string) => dispatch(showError(err));
 
   useEffect(() => {
+    const onGameError = (err: string) => dispatch(showError(err));
+
     socket.on("gameError", onGameError);
 
     return () => void socket.off("gameError", onGameError);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (alerts.length && !activeAlert) {
@@ -26,7 +27,7 @@ const Alerts = () => {
     } else if (alerts.length && activeAlert && open) {
       setOpen(false);
     }
-  }, [alerts, activeAlert, open]);
+  }, [dispatch, alerts, activeAlert, open]);
 
   const handleClose = () => setOpen(false);
 
@@ -41,7 +42,7 @@ const Alerts = () => {
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       sx={{
-        bottom: "12%",
+        bottom: "2rem",
       }}
       anchorOrigin={{
         vertical: "bottom",

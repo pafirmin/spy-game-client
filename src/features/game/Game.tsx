@@ -1,7 +1,7 @@
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { RootState } from "../../app/store";
 import Board from "../../components/board";
 import GameControl from "../../components/game-control";
@@ -24,6 +24,7 @@ import {
 
 const Game = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("lg"));
   const dispatch = useDispatch();
   const player = useSelector((state: RootState) => state.player);
@@ -49,6 +50,10 @@ const Game = () => {
   const onReconnect = () => socket.emit("rejoin", player, room);
   const onPlayerDisconnect = (player: Player) =>
     dispatch(playerDisconnected(player));
+
+  if (!player.name || !player.id) {
+    navigate(`/?game=${room}`);
+  }
 
   useEffect(() => {
     socket.emit("join", player, room);

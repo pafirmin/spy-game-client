@@ -57,6 +57,7 @@ export const gameSlice = createSlice({
       state.activeTeam = state.startingTeam;
     },
     addPlayer: (state, action: PayloadAction<Player>) => {
+      console.log(action.payload)
       const player = state.players.find((p) => p.id === action.payload.id);
 
       if (player) {

@@ -4,15 +4,15 @@ import { Teams, assignSpymaster } from "../game/game.slice";
 export interface Player {
   id: string;
   name: string;
-  team: Teams | null;
+  team: Teams | undefined;
   isSpymaster: boolean;
   disconnected: boolean;
 }
 
 const initialState: Player = {
   id: localStorage.getItem("id") || "",
-  name: "",
-  team: null,
+  name: localStorage.getItem("name") || "",
+  team: undefined,
   isSpymaster: false,
   disconnected: false,
 };

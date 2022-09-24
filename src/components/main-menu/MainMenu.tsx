@@ -1,22 +1,22 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { updatePlayer } from "../../features/player/player.slice";
 import socket from "../../services/socket";
 import axios from "axios";
 import { showError } from "../../features/alerts/alerts.slice";
+import { RootState } from "../../app/store";
 
 const MainMenu = () => {
+  const [searchParams] = useSearchParams();
+  const player = useSelector((state: RootState) => state.player);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [values, setValues] = useState({
-    name: "",
-    room: "",
-    team: null,
+    room: searchParams.get("game") || "",
+    name: player.name || "",
   });
-
-  const onSuccess = (name: string) => navigate(`/${name}`);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -24,14 +24,11 @@ const MainMenu = () => {
 
   const handleCreateRoom = async () => {
     try {
-      dispatch(updatePlayer({ name: values.name, team: values.team }));
+      dispatch(updatePlayer({ name: values.name }));
 
-      const res = await axios.post(
-        "https://obscure-oasis-37328.herokuapp.com/games",
-        {
-          name: values.room,
-        }
-      );
+      const res = await axios.post("http://localhost:2000/games", {
+        name: values.room,
+      });
 
       if (res.status === 201) {
         navigate(`/${values.room}`);
@@ -39,17 +36,13 @@ const MainMenu = () => {
     } catch (err) {
       dispatch(showError(err.response.data.message));
     }
-    // dispatch(updatePlayer({ name: values.name, team: values.team }));
-    // socket.emit("create", values.room);
   };
 
   const handleJoinRoom = async () => {
     try {
-      dispatch(updatePlayer({ name: values.name, team: values.team }));
+      dispatch(updatePlayer({ name: values.name }));
 
-      const res = await axios.get(
-        `https://obscure-oasis-37328.herokuapp.com/games/${values.room}`
-      );
+      const res = await axios.get("http://localhost:2000/games/" + values.room);
 
       if (res.status === 200) {
         navigate(`/${values.room}`);
@@ -61,10 +54,11 @@ const MainMenu = () => {
   };
 
   useEffect(() => {
+    const onSuccess = (name: string) => navigate(`/${name}`);
     socket.on("gameFound", onSuccess);
 
     return () => void socket.off("gameFound", onSuccess);
-  }, []);
+  }, [navigate]);
 
   return (
     <Box
