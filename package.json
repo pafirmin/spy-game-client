@@ -2,7 +2,7 @@
   "name": "spy-game-client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://pafirmin.github.io/spy-game-client/",
+  "homepage": "https://espionage.paulfirmin.co.uk/",
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
