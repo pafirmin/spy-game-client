@@ -1,11 +1,6 @@
 import React from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  HashRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Game from "./features/game/Game";
 import MainMenu from "./components/main-menu/";
 import { ThemeProvider } from "@mui/material/styles";
@@ -18,12 +13,12 @@ function App() {
     <ThemeProvider theme={theme}>
       <Container maxWidth={false}>
         <Alerts />
-        <HashRouter>
+        <Router>
           <Routes>
             <Route path="/" element={<MainMenu />} />
             <Route path="/:room" element={<Game />} />
           </Routes>
-        </HashRouter>
+        </Router>
       </Container>
     </ThemeProvider>
   );

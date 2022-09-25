@@ -42,7 +42,7 @@ const MainMenu = () => {
     try {
       dispatch(updatePlayer({ name: values.name }));
 
-      const res = await axios.get(`/games/${values.room}`);
+      const res = await axios.get(`/api/games/${values.room}`);
 
       if (res.status === 200) {
         navigate(`/${values.room}`);
