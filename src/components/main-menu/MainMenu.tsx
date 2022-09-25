@@ -26,7 +26,7 @@ const MainMenu = () => {
     try {
       dispatch(updatePlayer({ name: values.name }));
 
-      const res = await axios.post("http://localhost:2000/games", {
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE}/games`, {
         name: values.room,
       });
 
@@ -42,7 +42,9 @@ const MainMenu = () => {
     try {
       dispatch(updatePlayer({ name: values.name }));
 
-      const res = await axios.get("http://localhost:2000/games/" + values.room);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_BASE}/games/${values.room}`
+      );
 
       if (res.status === 200) {
         navigate(`/${values.room}`);
