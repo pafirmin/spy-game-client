@@ -51,7 +51,7 @@ const Game = () => {
   const onPlayerDisconnect = (player: Player) =>
     dispatch(playerDisconnected(player));
 
-  if (!player.name || !player.id) {
+  if (!player.name && !player.id) {
     navigate(`/?game=${room}`);
   }
 
